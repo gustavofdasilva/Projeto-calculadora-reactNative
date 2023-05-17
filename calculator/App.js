@@ -1,52 +1,69 @@
 import { StatusBar } from 'expo-status-bar';
-import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useState } from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, View, Dimensions, Pressable, TouchableOpacity } from 'react-native';
 
 
 
 export default function App() {
+
+  const [input, setInput] = useState("");
+
+  const onPressHandle = (keyCode) => () => {
+      if(keyCode == "=") {
+        setInput(eval(input))
+      } else if (keyCode == 'C') {
+        setInput("");
+      } else {
+        setInput(input + keyCode);
+      }
+  }
+
   const buttonKeys = [
     {keyCode: '1'},
     {keyCode: '2'},
     {keyCode: '3'},
+    {keyCode: '-'},
     {keyCode: '4'},
     {keyCode: '5'},
     {keyCode: '6'},
+    {keyCode: '+'},
     {keyCode: '7'},
     {keyCode: '8'},
     {keyCode: '9'},
-    {keyCode: '10'},
-    {keyCode: '11'},
-    {keyCode: '12'},
-    {keyCode: '13'},
-    {keyCode: '14'},
-    {keyCode: '15'},
-    {keyCode: '16'},
+    {keyCode: '/'},
+    {keyCode: 'C'},
+    {keyCode: '0'},
+    {keyCode: '='},
+    {keyCode: '*'},
   ]
   
-  const ButtonCalc = ({keyCode}) => {
-    return (
-      <View style={styles.buttonView}>
-        <Text>{keyCode}</Text>
-      </View>
-    );
-  }
-
+  const SCREEN_HEIGHT = Dimensions.get('window').height;
   return (
     <View style={styles.main}>
       <View style={styles.textInputView}>
         <TextInput
+          defaultValue={input}
+          editable={false}
           style={styles.textInput}
           />
       </View>
-      <SafeAreaView
-        style={{flex:1}}>
-        <FlatList
-          contentContainerStyle={{flexGrow:1}}
-          data={buttonKeys}
-          renderItem={({item}) => <ButtonCalc keyCode={item.keyCode}/>}
-          numColumns={4}
-        />
-      </SafeAreaView>
+        <View style={{height: SCREEN_HEIGHT, justifyContent: 'center'}}>
+          <FlatList
+            style={{
+              backgroundColor: '#F54'
+            }}
+            keyExtractor={this.keyExtractor}          
+            data={buttonKeys}
+            renderItem={({item}) => (
+              <TouchableOpacity 
+                style={styles.buttonView}
+                onPress={onPressHandle(item.keyCode)}>
+                <Text style={{fontSize: 20}}>{item.keyCode}</Text>
+              </TouchableOpacity>
+            )}
+            numColumns={4}
+          />
+        </View>
     </View>
   );
 }
@@ -78,7 +95,11 @@ const styles = StyleSheet.create({
     },
 
   buttonView: {
-    backgroundColor: '#DFF',
-    flexGrow: 1,
+    backgroundColor: '#DFFFFF55',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 110,
+    margin: 1,
   }
 });
