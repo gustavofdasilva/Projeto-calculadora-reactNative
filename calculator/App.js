@@ -4,10 +4,13 @@ import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, View, Dimensions, 
 
 const AppColors = {
   background: '#1a1a1a',
+  backgroundButton: '#212121',
   text: '#FDFDFD',
 }
 
 export default function App() {
+
+
   const [input, setInput] = useState("");
 
   const onPressHandle = (keyCode) => () => {
@@ -20,7 +23,7 @@ export default function App() {
         }
         
       } else if (keyCode == 'C') {
-        setInput("");
+        setInput(""); 
       } else {
         setInput(input + keyCode);
       }
@@ -58,13 +61,15 @@ export default function App() {
         <View style={{height: SCREEN_HEIGHT, justifyContent: 'center', backgroundColor: '#F0d'}}>
           <FlatList
             style={{
-              backgroundColor: AppColors.background
+              backgroundColor: AppColors.backgroundButton
             }}
             keyExtractor={this.keyExtractor}          
             data={buttonKeys}
             renderItem={({item}) => (
               <TouchableOpacity 
-                style={styles.buttonView}
+                style={[styles.buttonView, {
+                  backgroundColor: item.keyCode == 'C' ? '#9DF' : '#8a8a8a33'
+                }]}
                 onPress={onPressHandle(item.keyCode)}>
                 <Text style={{fontSize: 20, color:AppColors.text}}>{item.keyCode}</Text>
               </TouchableOpacity>
