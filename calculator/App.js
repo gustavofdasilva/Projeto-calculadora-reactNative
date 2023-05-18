@@ -1,16 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, View, Dimensions, Pressable, TouchableOpacity } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, View, Dimensions, Pressable, TouchableOpacity, Alert } from 'react-native';
 
-
+const AppColors = {
+  background: '#1a1a1a',
+  text: '#FDFDFD',
+}
 
 export default function App() {
-
   const [input, setInput] = useState("");
 
   const onPressHandle = (keyCode) => () => {
       if(keyCode == "=") {
-        setInput(eval(input))
+        try {
+          let value = eval(input);
+          setInput(value.toString());
+        } catch (error) {
+          Alert.alert('Warning!','Invalid expression')
+        }
+        
       } else if (keyCode == 'C') {
         setInput("");
       } else {
@@ -47,10 +55,10 @@ export default function App() {
           style={styles.textInput}
           />
       </View>
-        <View style={{height: SCREEN_HEIGHT, justifyContent: 'center'}}>
+        <View style={{height: SCREEN_HEIGHT, justifyContent: 'center', backgroundColor: '#F0d'}}>
           <FlatList
             style={{
-              backgroundColor: '#F54'
+              backgroundColor: AppColors.background
             }}
             keyExtractor={this.keyExtractor}          
             data={buttonKeys}
@@ -58,7 +66,7 @@ export default function App() {
               <TouchableOpacity 
                 style={styles.buttonView}
                 onPress={onPressHandle(item.keyCode)}>
-                <Text style={{fontSize: 20}}>{item.keyCode}</Text>
+                <Text style={{fontSize: 20, color:AppColors.text}}>{item.keyCode}</Text>
               </TouchableOpacity>
             )}
             numColumns={4}
@@ -76,18 +84,18 @@ const styles = StyleSheet.create({
 
   textInputView: {
     height: 250,
-    backgroundColor: '#F99',
+    backgroundColor: AppColors.background,
     alignItems: 'flex-end',
-    justifyContent: 'flex-end'    
+    justifyContent: 'flex-end',
+    borderBottomWidth: 1,
   }, 
     textInput: {
-      backgroundColor:"#FFF",
-      color: '#000',
-      width: '100%',
+      textAlign:'left',
+      color: AppColors.text,
       height: '40%',
       marginBottom:10,
+      marginRight: 30,
       fontSize: 40,
-      padding: 10,
     },
 
   buttonsView: {
@@ -95,11 +103,12 @@ const styles = StyleSheet.create({
     },
 
   buttonView: {
-    backgroundColor: '#DFFFFF55',
+    backgroundColor: '#8a8a8a33',
     flex: 1,
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 110,
+    height: 145,
     margin: 1,
   }
 });
